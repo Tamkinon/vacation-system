@@ -1,0 +1,20 @@
+env/
+.env
+/node_modules
+
+#python -m venv env
+#env/scripts/activate
+#pip install django
+#pip install selenium
+#pip install pillow
+#pip install flask
+#pip install dotenv
+#django-admin startproject guy
+#cd guy
+#python manage.py runserver
+#ctrl c
+#deactivate
+#python manage.py runserver
+#...........................
+#pip freeze > requirements.txt
+#pip install requirements
