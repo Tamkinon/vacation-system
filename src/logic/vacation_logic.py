@@ -1,3 +1,9 @@
+import os
+import sys
+
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+sys.path.append(project_root)
+
 from src.utils.dal import DAL
 
 
@@ -15,20 +21,20 @@ class VacationLogic:
         '''returns: list of vacation dictionaries'''
         '''empty list if no vacations in the database'''
 
-        query = "SELECT * from vacations_mysql.vacations"
+        query = "SELECT * from vacation_system.vacations"
         result = self.dal.get_table(query)
         return result if result is not None else []
 
-    def add_vacation(self, title, description, start_date, end_date, countries_name, price, image):
+    def add_vacation(self, vacation_title, start_date, end_date, country, price, img_url):
         try:
             query = """
-            INSERT INTO vacations_mysql.vacations 
-            (title, description, start_date, end_date, countries_id, price, total_likes, image)
+            INSERT INTO vacation_system.vacations 
+            (vacation_title, start_date, end_date, price, total_likes, img_url, country)
             VALUES 
-            (%s, %s, %s, %s, (SELECT id FROM vacations_mysql.countries WHERE country_name LIKE %s), %s, 0, %s)
+            (%s, %s, %s, %s, 0, %s, (SELECT id FROM vacations_mysql.countries WHERE country_name LIKE %s))
             """
-            params = (title, description, start_date,
-                    end_date, f"%{countries_name}%", price, image)
+            params = (vacation_title, start_date,
+                    end_date,  price, img_url, f"%{country}%",)
             self.dal.insert(query, params)
             return True
 
@@ -43,7 +49,7 @@ class VacationLogic:
         clause = ", ".join([f"{k} = %s" for k in kwargs.keys()])
 
         params = tuple(kwargs.values()) + (id,)
-        query = f"UPDATE vacations_mysql.vacations SET {clause} WHERE id = %s"
+        query = f"UPDATE vacation_system.vacations SET {clause} WHERE id = %s"
 
         try:
             self.dal.update(query, params)
@@ -53,7 +59,7 @@ class VacationLogic:
             return False
 
     def del_vacation(self, id):
-        query = "DELETE FROM vacations_mysql.vacations WHERE id = %s"
+        query = "DELETE FROM vacation_system.vacations WHERE id = %s"
         params = (id,)
         try:
             result = self.dal.delete(query, params)
