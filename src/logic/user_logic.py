@@ -52,7 +52,12 @@ class UserLogic:
             print(f"Error validating login: {e}")
             return False
         
-        
+    def get_user_by_email(self, email):
+        query = "SELECT * FROM users WHERE email = %s"
+        params = (email,)
+        result = self.dal.get_table(query, params)
+        return result if result is not None else []
+  
       
 if __name__ == "__main__":
     try:

@@ -17,14 +17,16 @@ class SystemFacade:
 
     def register(self):
         """Register a new account."""
+
         firstname = input("Enter first name: ").strip()
         lastname = input("Enter last name: ").strip()
         email = input("Enter email: ").strip()
         password = input("Enter password: ").strip()
         date_of_birth = input("Enter date of birth (YYYY-MM-DD): ").strip()
         role = input("Enter role (1 - User / 2 - Admin): ").strip()
-
+ 
         self.current_user = {
+            "user_id": 0,
             "firstname": firstname,
             "lastname": lastname,
             "email": email,
@@ -35,7 +37,7 @@ class SystemFacade:
 
         signin = self.user_logic.check_valid_signup(self.current_user['email'])
         if signin: 
-            print(f"Registration successful! Your user ID is {self.current_user['id']}.")
+            print(f"Registration successful! Your user ID is {self.current_user['user_id']}.")
         else:
             print("Registration failed. Please try again.")
 
@@ -46,14 +48,9 @@ class SystemFacade:
 
         login = self.user_logic.check_valid_login(email, password)
         if login:
-            self.current_user = {
-                "user_id": self.current_user['user_id'], 
-                "firstname": self.current_user['firstname'],
-                "lastname": self.current_user['lastname'],
-                "email": self.current_user['email'],
-                "role": self.current_user['role']
-            }
+            self.current_user = self.user_logic.get_user_by_email(email)
             print(f"Welcome, {self.current_user['firstname']}! Your user ID is {self.current_user['user_id']}.")
+        
         else:
             print("Login failed. Check your credentials.")
 
