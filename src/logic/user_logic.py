@@ -52,6 +52,7 @@ class UserLogic:
             print(f"Error validating login: {e}")
             return False
         
+        
       
 if __name__ == "__main__":
     try:
