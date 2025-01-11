@@ -58,12 +58,10 @@ if __name__ == "__main__":
     try:
         with UserLogic() as user_logic:
             email1 = "will.thomas@example.com"
-            print(f"can {email1} signup? -> {
-                  user_logic.check_valid_signup(email1)}")
+            print(f"can {email1} signup? -> {user_logic.check_valid_signup(email1)}")
     
             email2 = "alice.smith@example.com"
             password = "password123"
-            print(f"can email: {email2} | password: {password} login? -> {
-                  user_logic.check_valid_login(email2, password)}")
+            print(f"can email: {email2} | password: {password} login? -> {user_logic.check_valid_login(email2, password)}")
     except Exception as err:
         print(f"Error: {err}")
