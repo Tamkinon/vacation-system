@@ -34,6 +34,7 @@ class LikeLogic:
             params = (user_id, f"%{vacation_title}%")
             self.dal.insert(query, params)
             return True
+        
         except Exception as err:
             print(f"Error adding like: {err}")
             return False

@@ -6,7 +6,7 @@ sys.path.append(project_root)
 
 from src.utils.dal import DAL
 
-class user_logic:
+class UserLogic:
 
     def __init__(self):
         self.dal = DAL()
@@ -63,7 +63,6 @@ class user_logic:
         except Exception as err:
             print(f"Error deleting vacation: {err}")
             return False
-
 
       
 if __name__ == "__main__":
