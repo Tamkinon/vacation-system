@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `vacation_system`.`users` (
   `user_id` INT NOT NULL AUTO_INCREMENT,
   `firstname` VARCHAR(45) NULL,
   `lastname` VARCHAR(45) NULL,
-  `email` VARCHAR(100) NULL,
+  UNIQUE `email` VARCHAR(100) NULL,
   `password` VARCHAR(500) NULL,
   `date_of_birth` DATE NULL,
   `role` INT NOT NULL,
