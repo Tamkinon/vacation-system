@@ -7,7 +7,6 @@ sys.path.append(project_root)
 from src.utils.dal import DAL
 
 class UserLogic:
-
     def __init__(self):
         self.dal = DAL()
 
@@ -17,56 +16,54 @@ class UserLogic:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.dal.close()
 
-    def add_vacation(self, vacation_id,vacation_title, start_date, end_date, price, total_likes, img_url, country):
-        
-        query = """
-            INSERT INTO `vacation_system`.`vacations` 
-            (vacation_id, vacation_title, start_date, end_date, price, total_likes, img_url, country)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-        """
-        
-        params = (vacation_id, vacation_title, start_date, end_date, price, total_likes, img_url, country)
+    def add_user(self, first_name, last_name, email, password, date_of_birth):
         try:
-            result = self.dal.insert(query, params)
+            query = """
+                    INSERT INTO vacation_system.users 
+                    (first_name, last_name, email, password, date_of_birth, role)
+                    VALUES 
+                    (%s, %s, %s, %s, %s, 2)
+                    """
+            params = (first_name, last_name,
+                        email,  password, date_of_birth,)
+            self.dal.insert(query, params)
             return True
         except Exception as err:
-            print(f"Error adding vacation: {err}")
-            return False    
-    
-    def edit_vacation(self, vacation_id, vacation_title, start_date, end_date, price, img_url, country):
-        
-        query = """
-            UPDATE `vacation_system`.`vacations` 
-            SET vacation_title = %s, start_date = %s, end_date = %s, price = %s, img_url = %s, country = %s 
-            WHERE vacation_id = %s
-        """
-        params = (vacation_title, start_date, end_date, price, img_url, country, vacation_id)
-    
+                print(f"Error adding user: {err}")
+                return False
+
+    def check_valid_signup(self, email):
+        query = "SELECT COUNT(*) AS count FROM vacation_system.users WHERE email = %s"
+        params = (email,)
         try:
-            result = self.dal.update(query, params)
-            return True
-        except Exception as err:
-            print(f"Error editing vacation: {err}")
+            result = self.dal.get_scalar(query, params)
+            return result["count"] == 0 if result else True
+        except Exception as e:
+            print(f"Error validating signup: {e}")
             return False
 
-    def delete_vacation(self, vacation_id):
-       
-        query = """
-            DELETE FROM `vacation_system`.`vacations` 
-            WHERE vacation_id = %s
-        """
-        params = (vacation_id)
-
+    def check_valid_login(self, email, password):
+        query = "SELECT COUNT(*) AS count FROM vacation_system.users WHERE email = %s AND password = %s"
+        params = (email, password,)
         try:
-            result = self.dal.delete(query, params)
-            return True
-        except Exception as err:
-            print(f"Error deleting vacation: {err}")
+            result = self.dal.get_scalar(query, params)
+            return result["count"] > 0 if result else False
+        except Exception as e:
+            print(f"Error validating login: {e}")
             return False
-
+        
+        
       
 if __name__ == "__main__":
     try:
-       print("good")
+        with UserLogic() as user_logic:
+            email1 = "will.thomas@example.com"
+            print(f"can {email1} signup? -> {
+                  user_logic.check_valid_signup(email1)}")
+    
+            email2 = "alice.smith@example.com"
+            password = "password123"
+            print(f"can email: {email2} | password: {password} login? -> {
+                  user_logic.check_valid_login(email2, password)}")
     except Exception as err:
         print(f"Error: {err}")

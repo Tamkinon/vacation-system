@@ -40,10 +40,10 @@ class VacationFacade:
 
     def get_countries_name(self):
         while True:
-            countries_name = input("Enter country name: ").lower()
-            if self.country_logic.check_if_country_exist(countries_name):
+            country_name = input("Enter country name: ").lower()
+            if self.country_logic.check_if_country_exist(country_name):
                 print("Country added to vacation info!")
-                self.params.append(countries_name)
+                self.params.append(country_name)
                 break
             else:
                 print(
