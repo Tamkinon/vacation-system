@@ -16,15 +16,15 @@ class UserLogic:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.dal.close()
 
-    def add_user(self, first_name, last_name, email, password, date_of_birth):
+    def add_user(self, firstname, lastname, email, password, date_of_birth):
         try:
             query = """
                     INSERT INTO vacation_system.users 
-                    (first_name, last_name, email, password, date_of_birth, role)
+                    (firstname, lastname, email, password, date_of_birth, role)
                     VALUES 
                     (%s, %s, %s, %s, %s, 2)
                     """
-            params = (first_name, last_name,
+            params = (firstname, lastname,
                         email,  password, date_of_birth,)
             self.dal.insert(query, params)
             return True
