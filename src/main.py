@@ -1,6 +1,8 @@
 from facade.system_facade import SystemFacade
 
 def main():
+    sf = SystemFacade()
+
     while True:
         print("\n--- Menu ---")
         print("1. Register")
@@ -10,10 +12,10 @@ def main():
 
         if choice == '1':
             print("\n=== Register ===")
-            SystemFacade.register()
+            sf.register()
         elif choice == '2':
             print("\n=== Login ===")
-            SystemFacade.login()
+            sf.login()
         elif choice == '3':
             print("Goodbye!")
             break
