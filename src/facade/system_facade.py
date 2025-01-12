@@ -7,7 +7,7 @@ sys.path.append(project_root)
 from logic.user_logic import UserLogic
 from logic.vacation_logic import VacationLogic
 from logic.like_logic import LikeLogic
-from user_facade import UserFacade
+from facade.user_facade import UserFacade
 
 class SystemFacade:
     def __init__(self):
