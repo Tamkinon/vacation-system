@@ -99,7 +99,7 @@ def moving_boat():
         "       ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~     "
     ]
 
-    for i in range(135):  # Move the boat 30 steps
+    for i in range(110):  # Move the boat 30 steps
         clear_screen()
         for line in boat_frames:
             print(" " * i + line)  # Add spaces to move the boat to the right
