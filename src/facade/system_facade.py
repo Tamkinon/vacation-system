@@ -46,12 +46,12 @@ class SystemFacade:
 
     def like_vacation(self):
         """Like a vacation."""
-        if not self.current_user:
+        if not self.user_facade.current_user:
             print("You must be logged in to like a vacation.")
             return
 
         vacation_title = input("Enter the title of the vacation to like: ").strip()
-        result = self.like_logic.add_like(self.current_user["user_id"], vacation_title)
+        result = self.like_logic.add_like(self.user_facade.current_user["user_id"], vacation_title)
         if result:
             print("Vacation liked successfully!")
         else:
@@ -59,12 +59,12 @@ class SystemFacade:
 
     def unlike_vacation(self):
         """Unlike a vacation."""
-        if not self.current_user:
+        if not self.user_facade.current_user:
             print("You must be logged in to unlike a vacation.")
             return
 
         vacation_title = input("Enter the title of the vacation to unlike: ").strip()
-        result = self.like_logic.delete_like(self.current_user["user_id"], vacation_title)
+        result = self.like_logic.delete_like(self.user_facade.current_user["user_id"], vacation_title)
         if result:
             print("Vacation unliked successfully!")
         else:
@@ -72,11 +72,11 @@ class SystemFacade:
 
     def view_liked_vacations(self):
         """View vacations liked by the current user."""
-        if not self.current_user:
+        if not self.user_facade.current_user:
             print("You must be logged in to view your liked vacations.")
             return
 
-        liked_vacations = self.like_logic.get_all_likes(self.current_user["user_id"])
+        liked_vacations = self.like_logic.get_all_likes(self.user_facade.current_user["user_id"])
         for vacation in liked_vacations:
             print(
                 f"ID: {vacation['vacation_id']}, "
