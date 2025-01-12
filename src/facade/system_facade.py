@@ -1,5 +1,6 @@
 import sys
 import os
+from tabulate import tabulate
 
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_root)
@@ -28,21 +29,36 @@ class SystemFacade:
         """Logout the current user."""
         self.user_facade.logout()
 
+
     def view_all_vacations(self):
-        """View all available vacations."""
+        """View all available vacations in a tabular format."""
         
         vacations = self.vacation_logic.get_all_vacations()
-        for vacation in vacations:
-            print(
-                f"ID: {vacation['vacation_id']}, "
-                f"Title: {vacation['vacation_title']}, "
-                f"Start date: {vacation['start_date']}, "
-                f"End date: {vacation['end_date']}, "
-                f"Price: ${vacation['price']}, "
-                f"Total likes: {vacation['total_likes']}, "
-                f"Image: {vacation['img_url']}, "
-                f"Country: {vacation['country']}"
-            )
+        
+        # Prepare data for the table
+        table_data = [
+            [
+                vacation['vacation_id'],
+                vacation['vacation_title'],
+                vacation['start_date'],
+                vacation['end_date'],
+                f"${vacation['price']}",
+                vacation['total_likes'],
+                vacation['img_url'],
+                vacation['country']
+            ]
+            for vacation in vacations
+        ]
+        
+        # Define table headers
+        headers = [
+            "ID", "Title", "Start Date", "End Date", 
+            "Price", "Total Likes", "Image URL", "Country"
+        ]
+        
+        # Print the table
+        print(tabulate(table_data, headers=headers, tablefmt="grid"))
+
 
     def like_vacation(self):
         """Like a vacation."""
@@ -71,24 +87,41 @@ class SystemFacade:
             print("Failed to unlike vacation.")
 
     def view_liked_vacations(self):
-        """View vacations liked by the current user."""
+    
         if not self.user_facade.current_user:
             print("You must be logged in to view your liked vacations.")
             return
 
         liked_vacations = self.like_logic.get_all_likes(self.user_facade.current_user["user_id"])
-        for vacation in liked_vacations:
-            print(
-                f"ID: {vacation['vacation_id']}, "
-                f"Title: {vacation['vacation_title']}, "
-                f"Start date: {vacation['start_date']}, "
-                f"End date: {vacation['end_date']}, "
-                f"Price: ${vacation['price']}, "
-                f"Total likes: {vacation['total_likes']}, "
-                f"Image: {vacation['img_url']}, "
-                f"Country: {vacation['country']}"
-            )
 
+        # Check if there are liked vacations
+        if not liked_vacations:
+            print("You have not liked any vacations yet.")
+            return
+
+        # Prepare data for the table
+        table_data = [
+            [
+                vacation['vacation_id'],
+                vacation['vacation_title'],
+                vacation['start_date'],
+                vacation['end_date'],
+                f"${vacation['price']}",
+                vacation['total_likes'],
+                vacation['img_url'],
+                vacation['country']
+            ]
+            for vacation in liked_vacations
+        ]
+
+        # Define table headers
+        headers = [
+            "ID", "Title", "Start Date", "End Date", 
+            "Price", "Total Likes", "Image URL", "Country"
+        ]
+
+        # Print the table
+        print(tabulate(table_data, headers=headers, tablefmt="grid"))
 
 if __name__ == "__main__":
     facade = SystemFacade()
