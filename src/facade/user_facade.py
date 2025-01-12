@@ -76,7 +76,6 @@ class UserFacade:
                 print("Invalid email format!")
                 continue
 
-            print("Email added")
             return email
     
     def get_password(self):
@@ -89,7 +88,6 @@ class UserFacade:
             elif not any(char.islower() for char in password):
                 print("Password must contain at least one lowercase letter.")
             else:
-                print("Password added.")
                 return password
 
     def get_date_of_birth(self):
