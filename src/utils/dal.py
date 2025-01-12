@@ -129,14 +129,12 @@ class DAL:
 # דוגמת שימוש
 if __name__ == '__main__':
     with DAL() as dal:
-        # דוגמאות ל-get_table
         print("\n=== get_table examples ===")
         countries = dal.get_table("SELECT * FROM countries")
         users = dal.get_table("SELECT * FROM users WHERE age > %s", (25,))
 
         for country in countries:
-            print(f"country name: {country["name"]}, Population: {
-                  country["population"]}")
+            print(f"country name: {country["name"]}, Population: {country["population"]}")
         for user in users:
             print(f"User name:{user['name']}, Age:{user["age"]}")
 
