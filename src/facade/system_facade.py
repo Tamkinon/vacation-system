@@ -23,7 +23,7 @@ class SystemFacade:
         email = input("Enter email: ").strip()
         password = input("Enter password: ").strip()
         date_of_birth = input("Enter date of birth (YYYY-MM-DD): ").strip()
-        role = input("Enter role (1 - User / 2 - Admin): ").strip()
+        role = input("Enter role (1 - Admin / 2 - User): ").strip()
  
         self.current_user = {
             "user_id": 0,
