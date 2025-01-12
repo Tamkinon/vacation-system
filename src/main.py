@@ -41,17 +41,17 @@ def main():
             print("Invalid choice. Please enter 1, 2, or 3.")
 
     while True:
-        if sf.current_user['role'] == 2:
+        if sf.user_facade.current_user['role'] == 2:
             userMenu()
             choice = int(input("Choose an option (1-5): "))
             if choice == 1:
                 sf.view_all_vacations()
             elif choice == 2:
                 vacation_title = input("Enter a vacation title you would like: ")
-                sf.like_logic.add_like(sf.current_user['user_id'],vacation_title)
+                sf.like_logic.add_like(sf.user_facade.current_user['user_id'],vacation_title)
             elif choice == 3:
                 vacation_title = input("Enter a vacation title you would like: ")
-                sf.like_logic.delete_like(sf.current_user['user_id'],vacation_title)
+                sf.like_logic.delete_like(sf.user_facade.current_user['user_id'],vacation_title)
             elif choice == 4:
                 sf.view_liked_vacations()
             elif choice == 5:
@@ -59,7 +59,7 @@ def main():
             else:
                 print("Invalid choice. Please enter a command between 1 and 5.")
 
-        elif sf.current_user['role'] == 1: 
+        elif sf.user_facade.current_user['role'] == 1: 
             AdminMenu()  
             choice = int(input("Choose an option (1-5): "))
             if choice == 1:
