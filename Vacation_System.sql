@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS `vacation_system`.`users` (
   `date_of_birth` DATE NULL DEFAULT NULL,
   `role` INT NOT NULL,
   PRIMARY KEY (`user_id`),
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
   UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE,
   INDEX `fk_users_roles_idx` (`role` ASC) VISIBLE,
   UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
