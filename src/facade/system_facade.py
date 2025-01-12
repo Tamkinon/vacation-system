@@ -7,60 +7,26 @@ sys.path.append(project_root)
 from logic.user_logic import UserLogic
 from logic.vacation_logic import VacationLogic
 from logic.like_logic import LikeLogic
+from user_facade import UserFacade
 
 class SystemFacade:
     def __init__(self):
         self.user_logic = UserLogic()
         self.vacation_logic = VacationLogic()
         self.like_logic = LikeLogic()
-        self.current_user = None 
+        self.user_facade = UserFacade()
 
     def register(self):
         """Register a new account."""
-
-        firstname = input("Enter first name: ").strip()
-        lastname = input("Enter last name: ").strip()
-        email = input("Enter email: ").strip()
-        password = input("Enter password: ").strip()
-        date_of_birth = input("Enter date of birth (YYYY-MM-DD): ").strip()
-        role = input("Enter role (1 - Admin / 2 - User): ").strip()
- 
-        self.current_user = {
-            "user_id": 0,
-            "firstname": firstname,
-            "lastname": lastname,
-            "email": email,
-            "password": password,
-            "date_of_birth": date_of_birth,
-            "role": int(role)
-        }
-
-        signin = self.user_logic.check_valid_signup(self.current_user['email'])
-        if signin: 
-            print(f"Registration successful! Your user ID is {self.current_user['user_id']}.")
-        else:
-            print("Registration failed. Please try again.")
+        self.user_facade.add_user()
 
     def login(self):
         """Login to an existing account."""
-        email = input("Enter email: ").strip()
-        password = input("Enter password: ").strip()
-
-        login = self.user_logic.check_valid_login(email, password)
-        if login:
-            self.current_user = self.user_logic.get_user_by_email(email)
-            print(f"Welcome, {self.current_user['firstname']}! Your user ID is {self.current_user['user_id']}.")
-        
-        else:
-            print("Login failed. Check your credentials.")
+        self.user_facade.login()
 
     def logout(self):
         """Logout the current user."""
-        if self.current_user:
-            print(f"Goodbye, {self.current_user['firstname']} (ID: {self.current_user['user_id']})!")
-            self.current_user = None
-        else:
-            print("No user is currently logged in.")
+        self.user_facade.logout()
 
     def view_all_vacations(self):
         """View all available vacations."""
