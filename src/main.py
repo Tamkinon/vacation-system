@@ -99,11 +99,11 @@ def moving_boat():
         "       ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~     "
     ]
 
-    for i in range(110):  # Move the boat 30 steps
+    for i in range(110):  
         clear_screen()
         for line in boat_frames:
-            print(" " * i + line)  # Add spaces to move the boat to the right
-        time.sleep(0.03)  # Pause for animation speed
+            print(" " * i + line)  
+        time.sleep(0.03)
 
     print("\nThe boat has sailed away...")
 
