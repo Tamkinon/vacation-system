@@ -42,8 +42,21 @@ def handleUserActions(sf):
                 sf.like_logic.add_like(sf.user_facade.current_user['user_id'], vacation_title)
             elif choice == 3:
                 sf.view_liked_vacations()
-                vacation_title = input("Enter a vacation title you would like to unlike: ")
-                sf.like_logic.delete_like(sf.user_facade.current_user['user_id'], vacation_title)
+                # Check if the user has liked vacations
+                has_liked_any = sf.like_logic.has_user_liked_any_vacations(sf.user_facade.current_user['user_id'])
+
+                if not has_liked_any:
+                    continue
+                vacation_title = input("Enter the title of the vacation to unlike: ").strip()
+                has_liked_specific = sf.like_logic.has_user_liked_specific_vacation(sf.user_facade.current_user['user_id'], vacation_title)
+                if not has_liked_specific:
+                    print(f"You have not liked the vacation '{vacation_title}'.")
+                else:
+                    # Attempt to delete the like
+                    if sf.like_logic.delete_like(sf.user_facade.current_user['user_id'], vacation_title):
+                        print(f"Successfully unliked '{vacation_title}'!")
+                    else:
+                        print(f"Failed to unlike '{vacation_title}'. Please try again.")
             elif choice == 4:
                 sf.view_liked_vacations()
             elif choice == 5:

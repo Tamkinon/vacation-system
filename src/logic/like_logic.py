@@ -27,65 +27,122 @@ class LikeLogic:
 
     def add_like(self, user_id, vacation_title):
         try:
-
-        # First check if the like already exists
-            check_query = """
-            SELECT COUNT(*) as count 
-            FROM vacation_system.likes l
-            JOIN vacation_system.vacations v ON l.vacation_id = v.vacation_id
-            WHERE l.user_id = %s AND v.vacation_title LIKE %s
+            # Fetch vacation_id based on vacation_title
+            vacation_query = """
+            SELECT vacation_id FROM vacation_system.vacations WHERE vacation_title = %s
             """
-            check_params = (user_id, f"%{vacation_title}%")
-            result = self.dal.get_scalar(check_query, check_params)
+            vacation = self.dal.get_one(vacation_query, (vacation_title,))
             
-            if result['count'] > 0:
-                print("You have already liked this vacation!")
+            if not vacation:
+                print("Vacation not found.")
                 return False
-            
-        # If no existing like, proceed with adding the like
-            query = """INSERT INTO vacation_system.likes 
-            (user_id, vacation_id)
-            VALUES (%s, (SELECT vacation_id FROM vacation_system.vacations WHERE vacation_title LIKE %s))
+
+            vacation_id = vacation["vacation_id"]
+
+            # Check if user already liked the vacation
+            like_check_query = """
+            SELECT 1 FROM vacation_system.likes WHERE user_id = %s AND vacation_id = %s
             """
-            params = (user_id, f"%{vacation_title}%")
-            self.dal.insert(query, params)
+            like_exists = self.dal.get_scalar(like_check_query, (user_id, vacation_id))
+
+            if like_exists:
+                print("User has already liked this vacation.")
+                return False
+
+            # Add like to the likes table and increment total_likes
+            like_query = """
+            INSERT INTO vacation_system.likes (user_id, vacation_id) VALUES (%s, %s)
+            """
+            update_likes_query = """
+            UPDATE vacation_system.vacations 
+            SET total_likes = total_likes + 1 
+            WHERE vacation_id = %s
+            """
+            
+            self.dal.insert(like_query, (user_id, vacation_id))
+            self.dal.update(update_likes_query, (vacation_id,))
             print("👍")
             return True
-        
-        except Exception as err:
-            print(f"Error adding like: {err}")
+
+        except Exception as e:
+            print(f"Error adding like: {e}")
             return False
 
     def delete_like(self, user_id, vacation_title):
+        """
+        Removes a like for a vacation by a user. Updates the total_likes column in the vacations table.
+        """
         try:
-            # First check if the like exists
-            check_query = """
-            SELECT COUNT(*) as count 
+            # Fetch vacation_id based on vacation_title
+            vacation_query = """
+            SELECT vacation_id FROM vacation_system.vacations WHERE vacation_title = %s
+            """
+            vacation = self.dal.get_one(vacation_query, (vacation_title,))
+            
+            if not vacation:
+                print("Vacation not found.")
+                return False
+
+            vacation_id = vacation["vacation_id"]
+
+            # Check if user already liked the vacation
+            like_check_query = """
+            SELECT 1 FROM vacation_system.likes WHERE user_id = %s AND vacation_id = %s
+            """
+            like_exists = self.dal.get_scalar(like_check_query, (user_id, vacation_id))
+
+            if not like_exists:
+                print("User has not liked this vacation yet.")
+                return False
+
+            # Remove like from the likes table and decrement total_likes
+            unlike_query = """
+            DELETE FROM vacation_system.likes WHERE user_id = %s AND vacation_id = %s
+            """
+            update_likes_query = """
+            UPDATE vacation_system.vacations 
+            SET total_likes = total_likes - 1 
+            WHERE vacation_id = %s
+            """
+
+            self.dal.delete(unlike_query, (user_id, vacation_id))
+            self.dal.update(update_likes_query, (vacation_id,))
+            return True
+
+        except Exception as e:
+            print(f"Error deleting like: {e}")
+            return False
+        
+    def has_user_liked_any_vacations(self, user_id):
+        try:
+            # Query to check if the user has liked any vacation
+            query_any = """
+            SELECT COUNT(*) AS count
+            FROM vacation_system.likes
+            WHERE user_id = %s
+            """
+            result_any = self.dal.get_scalar(query_any, (user_id,))
+            has_liked_any = result_any and result_any["count"] > 0
+
+            return has_liked_any
+
+            
+        except Exception as e:
+            print(f"Error checking like status: {e}")
+            return False, False
+    
+    def has_user_liked_specific_vacation(self, user_id, vacation_title):
+            # Query to check if the user has liked the specific vacation
+            query_specific = """
+            SELECT COUNT(*) AS count
             FROM vacation_system.likes l
             JOIN vacation_system.vacations v ON l.vacation_id = v.vacation_id
-            WHERE l.user_id = %s AND v.vacation_title LIKE %s
+            WHERE l.user_id = %s AND v.vacation_title = %s
             """
-            check_params = (user_id, f"%{vacation_title}%")
-            result = self.dal.get_scalar(check_query, check_params)
-            
-            if result['count'] == 0:
-                print("You haven't liked this vacation!")
-                return False
-                
-            # If like exists, proceed with deletion
-            delete_query = """
-            DELETE l FROM vacation_system.likes l
-            JOIN vacation_system.vacations v ON l.vacation_id = v.vacation_id
-            WHERE l.user_id = %s AND v.vacation_title LIKE %s
-            """
-            delete_params = (user_id, f"%{vacation_title}%")
-            self.dal.delete(delete_query, delete_params)
-            print("Like removed successfully!")
-            return True
-            
-        except Exception as err:
-            print(f"Error removing like: {err}")
-            return False
+            result_specific = self.dal.get_scalar(query_specific, (user_id, vacation_title))
+            has_liked_specific = result_specific and result_specific["count"] > 0
+
+            return has_liked_specific
 
 
 if __name__ == "__main__":
