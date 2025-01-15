@@ -20,7 +20,7 @@ class DAL:
 
                 user="root",  #  MySQL הוא המשתמש בעל ההרשאות הגבוהות ביותר במערכת :
 
-                password="TamirBenDavid1",  # סיסמת ההתחברות
+                password="GuyBachar123456789",  # סיסמת ההתחברות
                 # בסביבת ייצור מומלץ לשמור בקובץ הגדרות נפרד או משתנה סביבה
 
                 database="vacation_system",  # שם מסד הנתונים

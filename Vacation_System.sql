@@ -7,15 +7,8 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema vacation_system
 -- -----------------------------------------------------
--- -----------------------------------------------------
--- Schema vacation_system
--- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Schema vacation_system
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `vacation_system` DEFAULT CHARACTER SET utf8mb3 ;
-USE `vacation_system` ;
+CREATE SCHEMA IF NOT EXISTS `vacation_system` DEFAULT CHARACTER SET utf8mb3;
+USE `vacation_system`;
 
 -- -----------------------------------------------------
 -- Table `vacation_system`.`countries`
@@ -24,11 +17,8 @@ CREATE TABLE IF NOT EXISTS `vacation_system`.`countries` (
   `country_id` INT NOT NULL AUTO_INCREMENT,
   `country_name` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`country_id`),
-  UNIQUE INDEX `country_id_UNIQUE` (`country_id` ASC) VISIBLE)
-ENGINE = InnoDB
-AUTO_INCREMENT = 11
-DEFAULT CHARACTER SET = utf8mb3;
-
+  UNIQUE INDEX `country_id_UNIQUE` (`country_id` ASC) VISIBLE
+) ENGINE = InnoDB AUTO_INCREMENT = 11 DEFAULT CHARACTER SET = utf8mb3;
 
 -- -----------------------------------------------------
 -- Table `vacation_system`.`roles`
@@ -37,11 +27,8 @@ CREATE TABLE IF NOT EXISTS `vacation_system`.`roles` (
   `role_id` INT NOT NULL AUTO_INCREMENT,
   `role_name` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`role_id`),
-  UNIQUE INDEX `role_id_UNIQUE` (`role_id` ASC) VISIBLE)
-ENGINE = InnoDB
-AUTO_INCREMENT = 3
-DEFAULT CHARACTER SET = utf8mb3;
-
+  UNIQUE INDEX `role_id_UNIQUE` (`role_id` ASC) VISIBLE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 DEFAULT CHARACTER SET = utf8mb3;
 
 -- -----------------------------------------------------
 -- Table `vacation_system`.`users`
@@ -60,11 +47,8 @@ CREATE TABLE IF NOT EXISTS `vacation_system`.`users` (
   INDEX `fk_users_roles_idx` (`role` ASC) VISIBLE,
   CONSTRAINT `fk_users_roles`
     FOREIGN KEY (`role`)
-    REFERENCES `vacation_system`.`roles` (`role_id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 5
-DEFAULT CHARACTER SET = utf8mb3;
-
+    REFERENCES `vacation_system`.`roles` (`role_id`)
+) ENGINE = InnoDB AUTO_INCREMENT = 5 DEFAULT CHARACTER SET = utf8mb3;
 
 -- -----------------------------------------------------
 -- Table `vacation_system`.`vacations`
@@ -83,11 +67,8 @@ CREATE TABLE IF NOT EXISTS `vacation_system`.`vacations` (
   INDEX `fk_vacations_countries1_idx` (`country` ASC) VISIBLE,
   CONSTRAINT `fk_vacations_countries1`
     FOREIGN KEY (`country`)
-    REFERENCES `vacation_system`.`countries` (`country_id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 13
-DEFAULT CHARACTER SET = utf8mb3;
-
+    REFERENCES `vacation_system`.`countries` (`country_id`)
+) ENGINE = InnoDB AUTO_INCREMENT = 13 DEFAULT CHARACTER SET = utf8mb3;
 
 -- -----------------------------------------------------
 -- Table `vacation_system`.`likes`
@@ -98,6 +79,7 @@ CREATE TABLE IF NOT EXISTS `vacation_system`.`likes` (
   `vacation_id` INT NOT NULL,
   PRIMARY KEY (`like_id`),
   UNIQUE INDEX `like_id_UNIQUE` (`like_id` ASC) VISIBLE,
+  UNIQUE INDEX `unique_user_vacation` (`user_id`, `vacation_id`),
   INDEX `fk_likes_users1_idx` (`user_id` ASC) VISIBLE,
   INDEX `fk_likes_vacations1_idx` (`vacation_id` ASC) VISIBLE,
   CONSTRAINT `fk_likes_users1`
@@ -105,36 +87,27 @@ CREATE TABLE IF NOT EXISTS `vacation_system`.`likes` (
     REFERENCES `vacation_system`.`users` (`user_id`),
   CONSTRAINT `fk_likes_vacations1`
     FOREIGN KEY (`vacation_id`)
-    REFERENCES `vacation_system`.`vacations` (`vacation_id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 5
-DEFAULT CHARACTER SET = utf8mb3;
-
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
+    REFERENCES `vacation_system`.`vacations` (`vacation_id`)
+    ON DELETE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 DEFAULT CHARACTER SET = utf8mb3;
 
 -- -----------------------------------------------------
--- Insert data into roles
+-- Insert initial data
 -- -----------------------------------------------------
+
+-- Insert roles
 INSERT INTO `vacation_system`.`roles` (`role_name`) VALUES
 ('Admin'),
 ('User');
 
--- -----------------------------------------------------
--- Insert data into users
--- -----------------------------------------------------
+-- Insert users
 INSERT INTO `vacation_system`.`users` (`firstname`, `lastname`, `email`, `password`, `date_of_birth`, `role`) VALUES
 ('Alice', 'Smith', 'alice.smith@example.com', 'password123', '1985-01-15', 1),
 ('Bob', 'Johnson', 'bob.johnson@example.com', 'password123', '1990-06-25', 1),
 ('Charlie', 'Brown', 'charlie.brown@example.com', 'password123', '1995-03-10', 2),
 ('Diana', 'White', 'diana.white@example.com', 'password123', '2000-12-05', 2);
 
--- -----------------------------------------------------
--- Insert data into countries
--- -----------------------------------------------------
+-- Insert countries
 INSERT INTO `vacation_system`.`countries` (`country_name`) VALUES
 ('United States'),
 ('Canada'),
@@ -147,9 +120,7 @@ INSERT INTO `vacation_system`.`countries` (`country_name`) VALUES
 ('Brazil'),
 ('South Africa');
 
--- -----------------------------------------------------
--- Insert data into vacations
--- -----------------------------------------------------
+-- Insert vacations
 INSERT INTO `vacation_system`.`vacations` (`vacation_title`, `start_date`, `end_date`, `price`, `total_likes`, `img_url`, `country`) VALUES
 ('Beach Getaway', '2024-01-10', '2024-01-20', 1500.00, 0, 'https://example.com/beach.jpg', 1),
 ('Ski Adventure', '2024-02-15', '2024-02-25', 2000.00, 0, 'https://example.com/ski.jpg', 2),
@@ -164,3 +135,6 @@ INSERT INTO `vacation_system`.`vacations` (`vacation_title`, `start_date`, `end_
 ('Mountain Retreat', '2024-11-01', '2024-11-10', 1200.00, 0, 'https://example.com/mountain.jpg', 1),
 ('Desert Oasis', '2024-12-05', '2024-12-15', 1100.00, 0, 'https://example.com/desert.jpg', 2);
 
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

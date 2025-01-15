@@ -27,6 +27,22 @@ class LikeLogic:
 
     def add_like(self, user_id, vacation_title):
         try:
+
+        # First check if the like already exists
+            check_query = """
+            SELECT COUNT(*) as count 
+            FROM vacation_system.likes l
+            JOIN vacation_system.vacations v ON l.vacation_id = v.vacation_id
+            WHERE l.user_id = %s AND v.vacation_title LIKE %s
+            """
+            check_params = (user_id, f"%{vacation_title}%")
+            result = self.dal.get_scalar(check_query, check_params)
+            
+            if result['count'] > 0:
+                print("You have already liked this vacation!")
+                return False
+            
+        # If no existing like, proceed with adding the like
             query = """INSERT INTO vacation_system.likes 
             (user_id, vacation_id)
             VALUES (%s, (SELECT vacation_id FROM vacation_system.vacations WHERE vacation_title LIKE %s))
@@ -40,17 +56,37 @@ class LikeLogic:
             return False
 
     def delete_like(self, user_id, vacation_title):
-        query = """DELETE FROM vacation_system.likes 
-        WHERE user_id = %s 
-        AND (SELECT vacation_id FROM vacation_system.vacations WHERE vacation_title LIKE %s)"""
-        params = (user_id, f"%{vacation_title}%")
         try:
-            result = self.dal.delete(query, params)
+            # First check if the like exists
+            check_query = """
+            SELECT COUNT(*) as count 
+            FROM vacation_system.likes l
+            JOIN vacation_system.vacations v ON l.vacation_id = v.vacation_id
+            WHERE l.user_id = %s AND v.vacation_title LIKE %s
+            """
+            check_params = (user_id, f"%{vacation_title}%")
+            result = self.dal.get_scalar(check_query, check_params)
+            
+            if result['count'] == 0:
+                print("You haven't liked this vacation!")
+                return False
+                
+            # If like exists, proceed with deletion
+            delete_query = """
+            DELETE l FROM vacation_system.likes l
+            JOIN vacation_system.vacations v ON l.vacation_id = v.vacation_id
+            WHERE l.user_id = %s AND v.vacation_title LIKE %s
+            """
+            delete_params = (user_id, f"%{vacation_title}%")
+            self.dal.delete(delete_query, delete_params)
+            print("Like removed successfully!")
             return True
+            
         except Exception as err:
-            print(f"Error deleting vacation: {err}")
+            print(f"Error removing like: {err}")
             return False
-        
+
+
 if __name__ == "__main__":
     try:
         with LikeLogic() as like_logic:
