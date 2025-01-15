@@ -66,8 +66,10 @@ def handleAdminActions(sf):
             elif choice == 2:
                 sf.vacation_facade.add_vacation()
             elif choice == 3:
+                sf.vacation_facade.view_all_vacations()
                 sf.vacation_facade.edit_vacation()
             elif choice == 4:
+                sf.vacation_facade.view_all_vacations()
                 sf.vacation_facade.del_vacation()
             elif choice == 5:
                 clear_screen()

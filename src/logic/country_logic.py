@@ -54,7 +54,6 @@ if __name__ == "__main__":
                 print("----------------------")
                 print(country)
             country_name = "Canada"
-            print(f"{country_name} in countries table? -> {
-                  country_logic.check_if_country_exist(country_name)}")
+            print(f"{country_name} in countries table? -> {country_logic.check_if_country_exist(country_name)}")
     except Exception as err:
         print(f"Error: {err}")
