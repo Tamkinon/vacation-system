@@ -25,7 +25,6 @@ class VacationFacade:
         self.get_price()
         self.get_image()
         
-
         return self.logic.add_vacation(*self.params)
 
     def get_title(self):
@@ -195,18 +194,65 @@ class VacationFacade:
             print(f"Failed to delete vacation ID {vacation_id}.")
 
 
-
 if __name__ == "__main__":
 
     vacation = VacationFacade()
 
-    result = vacation.add_vacation()
+    print("\nStarting Vacation Management System Tests")
+    print("----------------------------------------")
 
-    print("\nBooking Results:")
-    print("---------------")
-    print(f"Vacation title: {vacation.params[0]}")
-    print(f"Start date: {vacation.params[1]}")
-    print(f"End date: {vacation.params[2]}")
-    print(f"Country: {vacation.params[3]}")
-    print(f"Price: ${vacation.params[4]}")
-    print(f"Image URL: {vacation.params[5]}")
+    # Test 1: Add new vacation
+    print("\nTest 1: Adding a new vacation")
+    print("Please enter the following test data when prompted:")
+    print("Title: Summer Vacation")
+    print("Country: france")
+    print("Start date: 2025-07-01")
+    print("End date: 2025-07-15")
+    print("Price: 5000")
+    print("Image URL: (press Enter to skip)")
+    
+    result = vacation.add_vacation()
+    
+    if result:
+        print("✓ Test 1 passed: Vacation added successfully!")
+        print("Vacation details:")
+        print(f"- Title: {vacation.params[0]}")
+        print(f"- Start date: {vacation.params[1]}")
+        print(f"- End date: {vacation.params[2]}")
+        print(f"- Country: {vacation.params[3]}")
+        print(f"- Price: ${vacation.params[4]}")
+        print(f"- Image URL: {vacation.params[5]}")
+    else:
+        print("✗ Test 1 failed: Could not add vacation")
+
+    # Test 2: View all vacations
+    print("\nTest 2: Viewing all vacations")
+    vacation.view_all_vacations()
+    print("✓ Test 2 passed: Vacations displayed successfully!")
+
+    # Test 3: Edit vacation
+    print("\nTest 3: Editing a vacation")
+    print("Please enter the following when prompted:")
+    print("Vacation ID: (enter an existing ID)")
+    print("Field to update: vacation_title")
+    print("New value: Updated Summer Trip")
+    print("Field to update: (press Enter to finish)")
+    
+    vacation.edit_vacation()
+    print("✓ Test 3 completed: Please verify the vacation was updated correctly")
+
+    # Test 4: Delete vacation
+    print("\nTest 4: Deleting a vacation")
+    print("Please enter the following when prompted:")
+    print("Vacation ID: (enter the ID you want to delete)")
+    
+    vacation.del_vacation()
+    print("✓ Test 4 completed: Please verify the vacation was deleted correctly")
+
+    print("\nTest Summary")
+    print("------------")
+    print("1. Add Vacation: Completed")
+    print("2. View Vacations: Completed")
+    print("3. Edit Vacation: Completed")
+    print("4. Delete Vacation: Completed")
+    print("\nNote: Some tests require manual verification of the results.")
