@@ -62,20 +62,13 @@ def handleAdminActions(sf):
             choice = int(input("Choose an option (1-5): "))
             clear_screen()
             if choice == 1:
-                sf.view_all_vacations()
+                sf.vacation_facade.view_all_vacations()
             elif choice == 2:
-                vacation_title = input("Enter vacation title: ")
-                start_date = input("Enter start date (YYYY-MM-DD): ")
-                end_date = input("Enter end date (YYYY-MM-DD): ")
-                country = input("Enter country: ")
-                price = float(input("Enter price: "))
-                img_url = input("Enter image URL: ")
-                sf.vacation_logic.add_vacation(vacation_title, start_date, end_date, country, price, img_url)
+                sf.vacation_facade.add_vacation()
             elif choice == 3:
-                sf.edit_vacation()
+                sf.vacation_facade.edit_vacation()
             elif choice == 4:
-                vacation_id = input("Enter vacation ID to delete: ")
-                sf.vacation_logic.del_vacation(vacation_id)
+                sf.vacation_facade.del_vacation()
             elif choice == 5:
                 clear_screen()
                 print("Returning to main menu...")
