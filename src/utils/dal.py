@@ -72,7 +72,7 @@ class DAL:
                         print(" ")
                     return cursor
             except mysql.connector.Error as err:
-                print(f"Error executing query: Vacation not found!")
+                print(f"Error executing query: {err}")
         return None
 
     def get_table(self, query, params=None):
