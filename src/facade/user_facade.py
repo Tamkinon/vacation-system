@@ -41,6 +41,7 @@ class UserFacade:
             print(f"Welcome, {self.current_user['firstname']}! Your user ID is {self.current_user['user_id']}.")
         else:
             print("Login failed. Check your credentials.")
+        return login
     
     def logout(self):
         if self.current_user:

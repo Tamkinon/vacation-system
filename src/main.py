@@ -28,12 +28,13 @@ def main():
 
         if choice == '1':
             print("\n=== Register ===")
-            sf.register()
-            flag = False
+            if sf.register():
+                flag = False
         elif choice == '2':
             print("\n=== Login ===")
-            sf.login()
-            flag = False
+            check = sf.login()
+            if check:
+                flag = False
         elif choice == '3':
             print("Goodbye!")
             break
@@ -43,7 +44,11 @@ def main():
     while True:
         if sf.user_facade.current_user['role'] == 2:
             userMenu()
-            choice = int(input("Choose an option (1-5): "))
+            choice = input("Choose an option (1-5): ")
+            if not choice.isdigit():
+                print("Invalid choice. Please enter a command between 1 and 5.")
+                continue
+            choice = int(choice)
             if choice == 1:
                 sf.view_all_vacations()
             elif choice == 2:
@@ -61,7 +66,11 @@ def main():
 
         elif sf.user_facade.current_user['role'] == 1: 
             AdminMenu()  
-            choice = int(input("Choose an option (1-5): "))
+            choice = input("Choose an option (1-5): ")
+            if not choice.isdigit():
+                print("Invalid choice. Please enter a command between 1 and 5.")
+                continue
+            choice = int(choice)
             if choice == 1:
                 sf.view_all_vacations()
             if choice == 2:
@@ -73,8 +82,7 @@ def main():
                 img_url = input("Enter image URL: ")
                 sf.vacation_logic.add_vacation(vacation_title, start_date, end_date, country, price, img_url)
             elif choice == 3:
-                vacation_id = input("Enter vacation id: ")
-                sf.vacation_logic.edit_vacation(vacation_id)
+                sf.edit_vacation()
             elif choice == 4:
                 vacation_id = input("Enter vacation id: ")
                 sf.vacation_logic.del_vacation(vacation_id)

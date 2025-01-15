@@ -31,7 +31,7 @@ class VacationLogic:
             INSERT INTO vacation_system.vacations 
             (vacation_title, start_date, end_date, price, total_likes, img_url, country)
             VALUES 
-            (%s, %s, %s, %s, 0, %s, (SELECT id FROM vacations_mysql.countries WHERE country_name LIKE %s))
+            (%s, %s, %s, %s, 0, %s, (SELECT country_id FROM vacation_system.countries WHERE country_name LIKE %s))
             """
             params = (vacation_title, start_date,
                     end_date,  price, img_url, f"%{country}%",)
@@ -49,7 +49,7 @@ class VacationLogic:
         clause = ", ".join([f"{k} = %s" for k in kwargs.keys()])
 
         params = tuple(kwargs.values()) + (id,)
-        query = f"UPDATE vacation_system.vacations SET {clause} WHERE id = %s"
+        query = f"UPDATE vacation_system.vacations SET {clause} WHERE vacation_id = %s"
 
         try:
             self.dal.update(query, params)
@@ -59,10 +59,14 @@ class VacationLogic:
             return False
 
     def del_vacation(self, id):
-        query = "DELETE FROM vacation_system.vacations WHERE id = %s"
-        params = (id,)
         try:
-            result = self.dal.delete(query, params)
+            delete_likes_query = "DELETE FROM vacation_system.likes WHERE vacation_id = %s"
+            self.dal.delete(delete_likes_query, (id,))
+
+            delete_vacation_query = "DELETE FROM vacation_system.vacations WHERE vacation_id = %s"
+            self.dal.delete(delete_vacation_query, (id,))
+
+            print("Vacation and associated likes deleted successfully!")
             return True
         except Exception as err:
             print(f"Error deleting vacation: {err}")
