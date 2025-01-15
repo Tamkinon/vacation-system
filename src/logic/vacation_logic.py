@@ -55,7 +55,7 @@ class VacationLogic:
             self.dal.update(query, params)
             return True
         except Exception as e:
-            print(f"Error updating vacation: {e}")
+            print(f"Error updating vacation: Vacation not found!")
             return False
 
     def del_vacation(self, id):

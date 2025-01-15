@@ -54,23 +54,25 @@ class DAL:
         if self.connection:
             try:
                 with self.connection.cursor(dictionary=True) as cursor:
-                    print(f"Executing query: {query}")
+                    #print(f"Executing query: {query}")
                     if params:
-                        print(f"With parameters: {params}")
+                        #print(f"With parameters: {params}")
+                        print(" ")
                     cursor.execute(query, params)
                     if fetchall:
                         result = cursor.fetchall()
-                        print(f"Fetched {len(result)} rows")
+                        #print(f"Fetched {len(result)} rows")
                         return result
                     elif fetchone:
                         result = cursor.fetchone()
-                        print("Fetched one row")
+                        #print("Fetched one row")
                         return result
                     else:
-                        print(f"Query affected {cursor.rowcount} rows")
+                        #print(f"Query affected {cursor.rowcount} rows")
+                        print(" ")
                     return cursor
             except mysql.connector.Error as err:
-                print(f"Error executing query: {err}")
+                print(f"Error executing query: Vacation not found!")
         return None
 
     def get_table(self, query, params=None):
