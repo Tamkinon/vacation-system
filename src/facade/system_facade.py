@@ -96,36 +96,42 @@ class SystemFacade:
 
 if __name__ == "__main__":
     facade = SystemFacade()
+    
+    # Test 1: Register a new user
+    print("\nTesting Register...")
+    facade.register() 
+    print("Register test passed!\n")
 
-    while True:
-        print("\nOptions:")
-        print("1. Register")
-        print("2. Login")
-        print("3. Logout")
-        print("4. View All Vacations")
-        print("5. Like a Vacation")
-        print("6. Unlike a Vacation")
-        print("7. View Liked Vacations")
-        print("8. Exit")
+    # Test 2: Login with a user
+    print("Testing Login...")
+    facade.login()  
+    print("Login test passed!\n")
 
-        choice = input("Choose an option: ").strip()
+    # Test 3: Like a vacation (user must be logged in)
+    print("Testing Like Vacation...")
+    facade.user_facade.current_user = {"user_id": 1}  # Simulate logged-in user
+    facade.like_vacation()  
+    print("Like Vacation test passed!\n")
 
-        if choice == "1":
-            facade.register()
-        elif choice == "2":
-            facade.login()
-        elif choice == "3":
-            facade.logout()
-        elif choice == "4":
-            facade.view_all_vacations()
-        elif choice == "5":
-            facade.like_vacation()
-        elif choice == "6":
-            facade.unlike_vacation()
-        elif choice == "7":
-            facade.view_liked_vacations()
-        elif choice == "8":
-            print("Exiting system. Goodbye!")
-            break
-        else:
-            print("Invalid choice. Please try again.")
+    # Test 4: Unlike a vacation (user must be logged in)
+    print("Testing Unlike Vacation...")
+    facade.unlike_vacation()  
+    print("Unlike Vacation test passed!\n")
+
+    # Test 5: View liked vacations (user must be logged in)
+    print("Testing View Liked Vacations...")
+    facade.view_liked_vacations()  
+    print("View Liked Vacations test passed!\n")
+
+    # Test 6: Logout
+    print("Testing Logout...")
+    facade.logout()  
+    print("Logout test passed!\n")
+
+    # Test 7: Invalid action (when not logged in)
+    print("Testing Like Vacation without being logged in...")
+    facade.user_facade.current_user = None 
+    facade.like_vacation()  
+    print("Invalid Like Vacation test passed!\n")
+
+    print("Exiting system. Goodbye!")

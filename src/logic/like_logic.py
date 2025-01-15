@@ -49,6 +49,7 @@ class LikeLogic:
             """
             params = (user_id, f"%{vacation_title}%")
             self.dal.insert(query, params)
+            print("👍")
             return True
         
         except Exception as err:
@@ -89,10 +90,35 @@ class LikeLogic:
 
 if __name__ == "__main__":
     try:
+        user_id = 1
+        vacation_title = "Paris"
+
         with LikeLogic() as like_logic:
-            likes = like_logic.get_all_likes(1)
-            for like in likes:
-                print("----------------------")
-                print(like)
+            # Test get_all_likes
+            print("Testing get_all_likes:")
+            likes = like_logic.get_all_likes(user_id)
+            if likes:
+                for like in likes:
+                    print(f"Vacation ID: {like['vacation_id']}, Title: {like['vacation_title']}")
+            else:
+                print("No likes found for the user.")
+
+            # Test add_like
+            print("\nTesting add_like:")
+            added = like_logic.add_like(user_id, vacation_title)
+            if added:
+                print(f"Successfully added a like for vacation '{vacation_title}'.")
+            else:
+                print(f"Failed to add a like for vacation '{vacation_title}'.")
+
+            # Test delete_like
+            print("\nTesting delete_like:")
+            deleted = like_logic.delete_like(user_id, vacation_title)
+            if deleted:
+                print(f"Successfully deleted a like for vacation '{vacation_title}'.")
+            else:
+                print(f"Failed to delete a like for vacation '{vacation_title}'.")
+
     except Exception as err:
         print(f"Error: {err}")
+

@@ -6,7 +6,6 @@ sys.path.append(project_root)
 
 from src.utils.dal import DAL
 
-
 class VacationLogic:
     def __init__(self):
         self.dal = DAL()
@@ -76,9 +75,51 @@ class VacationLogic:
 if __name__ == "__main__":
     try:
         with VacationLogic() as vacation_logic:
+            # Test get_all_vacations
+            print("Testing get_all_vacations:")
             vacations = vacation_logic.get_all_vacations()
-            for vacation in vacations:
-                print("----------------------")
-                print(vacation)
+            if vacations:
+                print("Vacations retrieved successfully:")
+                for vacation in vacations:
+                    print(vacation)
+            else:
+                print("No vacations found in the database.")
+
+            # Test add_vacation
+            print("\nTesting add_vacation:")
+            vacation_title = "Summer Paradise"
+            start_date = "2025-06-15"
+            end_date = "2025-06-25"
+            country = "Greece"
+            price = 1200.50
+            img_url = "http://example.com/summer_paradise.jpg"
+            added = vacation_logic.add_vacation(vacation_title, start_date, end_date, country, price, img_url)
+            if added:
+                print(f"Vacation '{vacation_title}' added successfully.")
+            else:
+                print(f"Failed to add vacation '{vacation_title}'.")
+
+            # Test edit_vacation
+            print("\nTesting edit_vacation:")
+            vacation_id_to_edit = 1  # Replace with an existing vacation ID for a meaningful test
+            updated_data = {
+                "price": 1000.75,
+                "vacation_title": "Updated Paradise",
+            }
+            edited = vacation_logic.edit_vacation(vacation_id_to_edit, **updated_data)
+            if edited:
+                print(f"Vacation with ID {vacation_id_to_edit} updated successfully.")
+            else:
+                print(f"Failed to update vacation with ID {vacation_id_to_edit}.")
+
+            # Test del_vacation
+            print("\nTesting del_vacation:")
+            vacation_id_to_delete = 1  # Replace with an existing vacation ID for a meaningful test
+            deleted = vacation_logic.del_vacation(vacation_id_to_delete)
+            if deleted:
+                print(f"Vacation with ID {vacation_id_to_delete} deleted successfully.")
+            else:
+                print(f"Failed to delete vacation with ID {vacation_id_to_delete}.")
+
     except Exception as err:
         print(f"Error: {err}")

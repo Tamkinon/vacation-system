@@ -58,15 +58,48 @@ class UserLogic:
         result = self.dal.get_scalar(query, params)
         return result if result is not None else {}
   
-      
+
 if __name__ == "__main__":
     try:
+        # Test user data
+        test_firstname = "John"
+        test_lastname = "Doe"
+        test_email = "johndoe@example.com"
+        test_password = "password123"
+        test_dob = "1990-01-01"  # Example date of birth
+
         with UserLogic() as user_logic:
-            email1 = "will.thomas@example.com"
-            print(f"can {email1} signup? -> {user_logic.check_valid_signup(email1)}")
-    
-            email2 = "alice.smith@example.com"
-            password = "password123"
-            print(f"can email: {email2} | password: {password} login? -> {user_logic.check_valid_login(email2, password)}")
+            # Test add_user
+            print("Testing add_user:")
+            added = user_logic.add_user(test_firstname, test_lastname, test_email, test_password, test_dob)
+            if added:
+                print(f"User {test_firstname} {test_lastname} added successfully.")
+            else:
+                print(f"Failed to add user {test_firstname} {test_lastname}.")
+
+            # Test check_valid_signup
+            print("\nTesting check_valid_signup:")
+            is_valid_signup = user_logic.check_valid_signup(test_email)
+            if is_valid_signup:
+                print(f"Email '{test_email}' is available for signup.")
+            else:
+                print(f"Email '{test_email}' is already in use.")
+
+            # Test check_valid_login
+            print("\nTesting check_valid_login:")
+            is_valid_login = user_logic.check_valid_login(test_email, test_password)
+            if is_valid_login:
+                print(f"Login successful for email '{test_email}'.")
+            else:
+                print(f"Invalid login credentials for email '{test_email}'.")
+
+            # Test get_user_by_email
+            print("\nTesting get_user_by_email:")
+            user = user_logic.get_user_by_email(test_email)
+            if user:
+                print(f"User details for email '{test_email}': {user}")
+            else:
+                print(f"No user found with email '{test_email}'.")
+
     except Exception as err:
         print(f"Error: {err}")

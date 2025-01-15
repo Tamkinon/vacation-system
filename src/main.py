@@ -35,9 +35,9 @@ def handleUserActions(sf):
             choice = int(input("Choose an option (1-5): "))
             clear_screen()
             if choice == 1:
-                sf.view_all_vacations()
+                sf.vacation_facade.view_all_vacations()
             elif choice == 2:
-                sf.view_all_vacations()
+                sf.vacation_facade.view_all_vacations()
                 vacation_title = input("Enter a vacation title you would like to like: ")
                 sf.like_logic.add_like(sf.user_facade.current_user['user_id'], vacation_title)
             elif choice == 3:
