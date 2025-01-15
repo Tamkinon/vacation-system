@@ -19,11 +19,11 @@ class SystemFacade:
 
     def register(self):
         """Register a new account."""
-        self.user_facade.add_user()
+        return self.user_facade.add_user()
 
     def login(self):
         """Login to an existing account."""
-        self.user_facade.login()
+        return self.user_facade.login()
 
     def logout(self):
         """Logout the current user."""
@@ -59,6 +59,35 @@ class SystemFacade:
         # Print the table
         print(tabulate(table_data, headers=headers, tablefmt="grid"))
 
+
+    def edit_vacation(self):
+        vacation_id = input("Enter the ID of the vacation you want to edit: ").strip()
+        if not vacation_id.isdigit():
+            print("Invalid ID! Please enter a numeric value.")
+            return
+        vacation_id = int(vacation_id)
+        print("\nAvailable fields to update: vacation_title, price, start_date, end_date")
+        print("Enter the fields you want to update and their new values (leave blank to stop).")
+        updates = {}
+        while True:
+            field = input("\nEnter the field to update (or press Enter to finish): ").strip()
+            if not field:
+                break
+            if field not in ["vacation_title", "price", "start_date", "end_date"]:
+                print(f"Invalid field: {field}. Please choose a valid field.")
+                continue
+            value = input(f"Enter the new value for {field}: ").strip()
+            if field == "price" and value.replace('.', '', 1).isdigit():
+                value = float(value)
+            updates[field] = value
+        if updates:
+            success = self.vacation_logic.edit_vacation(vacation_id, **updates)
+            if success:
+                print(f"Vacation ID {vacation_id} updated successfully!")
+            else:
+                print(f"Failed to update vacation ID {vacation_id}.")
+        else:
+            print("No updates provided. Exiting.")
 
     def like_vacation(self):
         """Like a vacation."""

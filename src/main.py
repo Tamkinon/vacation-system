@@ -72,8 +72,7 @@ def handleAdminActions(sf):
                 img_url = input("Enter image URL: ")
                 sf.vacation_logic.add_vacation(vacation_title, start_date, end_date, country, price, img_url)
             elif choice == 3:
-                vacation_id = input("Enter vacation ID to edit: ")
-                sf.vacation_logic.edit_vacation(vacation_id)
+                sf.edit_vacation()
             elif choice == 4:
                 vacation_id = input("Enter vacation ID to delete: ")
                 sf.vacation_logic.del_vacation(vacation_id)
@@ -116,10 +115,12 @@ def main():
 
         if choice == '1':
             print("\n=== Register ===")
-            sf.register()
+            if not sf.register():
+                continue
         elif choice == '2':
             print("\n=== Login ===")
-            sf.login()
+            if not sf.login():
+                continue
 
             role = sf.user_facade.current_user['role']
             clear_screen()
