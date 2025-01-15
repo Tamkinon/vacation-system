@@ -115,10 +115,12 @@ def main():
 
         if choice == '1':
             print("\n=== Register ===")
-            sf.register()
+            if not sf.register():
+                continue
         elif choice == '2':
             print("\n=== Login ===")
-            sf.login()
+            if not sf.login():
+                continue
 
             role = sf.user_facade.current_user['role']
             clear_screen()
